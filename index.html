@@ -94,8 +94,8 @@
                 if (this.status === 200) {
                     const response = JSON.parse(this.responseText);
                     if (response.success) {
-                        // Redireccionar a GitHub si el login es exitoso
-                        window.location.href = 'https://github.com/kafufa/voxai/blob/main/';
+                        // Redireccionar a la página específica si el login es exitoso
+                        window.location.href = 'https://github.com/kafufa/voxai/blob/main/paguinainicioia.html';
                     } else {
                         // Mostrar mensaje de error
                         document.getElementById('error-message').textContent = 'Usuario o contraseña incorrectos';
