@@ -11,7 +11,8 @@ session_start();
 // Crear respuesta por defecto
 $response = array(
     'success' => false,
-    'message' => 'Error de autenticación'
+    'message' => 'Error de autenticación',
+    'redirect' => 'https://github.com/kafufa/voxai/blob/main/paguinainicioia.html'
 );
 
 // Verificar si se envió el formulario
