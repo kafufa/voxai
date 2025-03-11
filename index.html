@@ -14,6 +14,7 @@
         <input type="text" id="username" placeholder="Usuario">
         <input type="password" id="password" placeholder="Contraseña">
         <button id="login-btn">Ingresar</button>
+        <button id="register-btn">Registrarse</button>
         <p id="login-error" style="color: red; display: none;">Usuario o contraseña incorrectos</p>
     </div>
 
@@ -37,6 +38,12 @@
             } else {
                 document.getElementById("login-error").style.display = "block";
             }
+        });
+
+        // Añadir evento para el botón de registro
+        document.getElementById("register-btn").addEventListener("click", () => {
+            // Redirigir a la página de registro
+            window.location.href = "https://kafufa.github.io/voxai/register.html"; // Cambia esta URL según sea necesario
         });
 
         document.getElementById("start-btn").addEventListener("click", () => {
@@ -66,6 +73,7 @@
     </script>
 </body>
 </html>
+
 
 
 
