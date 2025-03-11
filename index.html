@@ -17,7 +17,6 @@
         <p id="login-error" style="color: red; display: none;">Usuario o contraseña incorrectos</p>
     </div>
 
-    
     <script>
         // Usuarios y contraseñas seguras (simulación)
         const users = {
@@ -33,12 +32,13 @@
             // Validación de usuario y contraseña
             if (users[username] && users[username] === password) {
                 // Redirigir a la URL deseada
-                window.location.href = "https://kafufa.github.io/voxai/index2.html";
+                window.location.href = "https://kafufa.github.io/voxai/asistente/index2.html";
             } else {
                 document.getElementById("login-error").style.display = "block";
             }
         });
 
+        // Mantén las funciones relacionadas con el reconocimiento de voz si es necesario
         document.getElementById("start-btn").addEventListener("click", () => {
             const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
             recognition.lang = "es-ES";
