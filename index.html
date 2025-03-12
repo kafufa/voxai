@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoxAI - Asistente de Voz</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+   
+    <div id="login-container" class="container">
+        <h2>Iniciar Sesión</h2>
+        <input type="text" id="username" placeholder="Usuario">
+        <input type="password" id="password" placeholder="Contraseña">
+        <button id="login-btn">Ingresar</button>
+        <p id="login-error" style="color: red; display: none;">Usuario o contraseña incorrectos</p>
+    </div>
+
+    <script>
+       
+        const users = {
+            "Marouan": "M@r0u@n!2024",
+            "Ivan": "1v@n_Seguro99",
+            "Noa": "N0a$ClaveXyz"
+        };
+
+        document.getElementById("login-btn").addEventListener("click", () => {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            if (users[username] && users[username] === password) {
+             
+                window.location.href = "https://kafufa.github.io/voxai/ia.html";
+            } else {
+                document.getElementById("login-error").style.display = "block";
+            }
+        });
+
+        document.getElementById("start-btn").addEventListener("click", () => {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = "es-ES";
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById("response").innerText = "Procesando: " + transcript;
+                
+                fetch("https://hook.eu2.make.com/sw3ligopuhaxs11xorsf61ia5apje4hy", { 
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ query: transcript })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("response").innerText = "Respuesta: " + data.response;
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    document.getElementById("response").innerText = "Hubo un error. Inténtalo de nuevo.";
+                });
+            };
+        });
+    </script>
+</body>
+</html>
+
