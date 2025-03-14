@@ -186,6 +186,21 @@
             margin-top: 20px;
         }
         
+        /* Estilo para el reloj */
+        .clock {
+            font-size: 24px;
+            font-weight: 500;
+            color: #FFD700;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 50px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
         @media (max-width: 768px) {
             nav {
                 flex-direction: column;
@@ -217,6 +232,10 @@
             p {
                 font-size: 16px;
             }
+            
+            .clock {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
@@ -236,7 +255,26 @@
         <div class="container">
             <h1>VoxAI</h1>
             <p>Este proyecto nos hemos basado en la alexa u asistentes pero con la ayuda de que tenemos soporte con la api de deepseek. Y tenemos el apapartado que es el visual y luego el físico que es el arduino.</p>
+            <div id="reloj" class="clock">00:00:00</div>
         </div>
     </div>
+
+    <script>
+        // Función para actualizar el reloj
+        function actualizarReloj() {
+            const ahora = new Date();
+            const horas = ahora.getHours().toString().padStart(2, '0');
+            const minutos = ahora.getMinutes().toString().padStart(2, '0');
+            const segundos = ahora.getSeconds().toString().padStart(2, '0');
+            
+            document.getElementById('reloj').textContent = `${horas}:${minutos}:${segundos}`;
+        }
+
+        // Actualizar el reloj cada segundo
+        setInterval(actualizarReloj, 1000);
+        
+        // Ejecutar inmediatamente para que no espere 1 segundo para mostrar la hora
+        actualizarReloj();
+    </script>
 </body>
 </html>
