@@ -11,7 +11,7 @@ app.use(cors());
 const db = mysql.createConnection({
     host: "localhost",
     user: "root", // Cambia esto según tu configuración
-    password: "", // Si tienes una contraseña, ponla aquí
+    password: "Super3", // Si tienes una contraseña, ponla aquí
     database: "voxai_db"
 });
 
