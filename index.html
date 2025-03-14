@@ -29,10 +29,10 @@
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
 
-            if (users[username] && users[username] === password) {
-             
+             if (users[username] && users[username] === password) {
                 window.location.href = "https://kafufa.github.io/voxai/apartados.html";
-            } else {
+                }     
+             else {
                 document.getElementById("login-error").style.display = "block";
             }
         });
