@@ -5,15 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VoxAI - Asistente de Voz</title>
     <link rel="stylesheet" href="styles2.css">
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=johUM0CDg6u4cwU5DmE-J6IiAICobnay30CfBGWaB5vFUAwymeuOpdvWG4JF-yPES1sT49yEIc5hUdjaLOMEEA" charset="UTF-8"></script>
 </head>
 <body>
     <div class="container">
-        <h1>VoxAI - Tu Asistente de Voz personal </h1>
-        <p>esta asistente esta impulsado por DeepSeek.</p>
+        <h1>VoxAI - Tu Asistente de Voz personal</h1>
+        <p>Esta asistente está impulsado por DeepSeek.</p>
         <button id="start-btn">🎤 Hablar</button>
         <p id="response">Esperando comando...</p>
+        
+        <!-- Botón de redirección añadido -->
+        <button id="redirect-btn" style="background-color: #4CAF50; color: white; padding: 10px 15px; margin-top: 20px; border: none; border-radius: 5px; cursor: pointer;">Ir a apartados</button>
     </div>
-    
+
     <script>
         document.getElementById("start-btn").addEventListener("click", () => {
             const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
@@ -23,10 +27,12 @@
             recognition.onresult = function(event) {
                 const transcript = event.results[0][0].transcript;
                 document.getElementById("response").innerText = "Procesando: " + transcript;
-                
+
                 fetch("/ask", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
                     body: JSON.stringify({ query: transcript })
                 })
                 .then(response => response.json())
@@ -34,6 +40,11 @@
                     document.getElementById("response").innerText = "Respuesta: " + data.response;
                 });
             };
+        });
+
+        // Evento de clic para el botón de redirección
+        document.getElementById("redirect-btn").addEventListener("click", () => {
+            window.location.href = "https://kafufa.github.io/voxai/apartados.html";
         });
     </script>
 </body>
