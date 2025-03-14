@@ -17,8 +17,12 @@
         <p id="login-error" style="color: red; display: none;">Usuario o contraseña incorrectos</p>
     </div>
 
+    <div id="assistant-container" class="container" style="display: none;">
+        <h2>Asistente de Voz</h2>
+        <button id="start-btn">Comenzar Reconocimiento de Voz</button>
+        <p id="response"></p>
+    </div>
 
-    
     <script>
         // Usuarios y contraseñas seguras (simulación)
         const users = {
@@ -32,8 +36,8 @@
             const password = document.getElementById("password").value;
 
             if (users[username] && users[username] === password) {
-                document.getElementById("login-container").style.display = "none";
-                document.getElementById("assistant-container").style.display = "block";
+                // Redirigir a la página deseada
+                window.location.href = "https://kafufa.github.io/voxai/apartados.html";
             } else {
                 document.getElementById("login-error").style.display = "block";
             }
@@ -66,5 +70,6 @@
     </script>
 </body>
 </html>
+
 
 
