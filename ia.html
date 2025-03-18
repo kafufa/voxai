@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VoxAI - Asistente de Voz</title>
-   <link rel="stylesheet" href="styles2.css"> 
+    <link rel="stylesheet" href="styles2.css">
 </head>
-
 <body>
     <div id="assistant-container" class="container">
         <h1>🤖 VoxAI - Asistente de Voz</h1>
@@ -22,22 +21,18 @@
     </div>
     
     <script>
-        // Elementos del DOM
         const startBtn = document.getElementById('start-btn');
         const stopBtn = document.getElementById('stop-btn');
         const textInput = document.getElementById('text-input');
         const sendBtn = document.getElementById('send-btn');
         const responseBox = document.getElementById('response');
         
-        // Variables globales
         let recognition;
         let isListening = false;
         const apiBaseURL = 'https://kafufa.github.io/voxai/backend/env';
         
-        // Verificar si el navegador soporta reconocimiento de voz
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        
-        // Función para inicializar el reconocimiento de voz
+
         function initializeSpeechRecognition() {
             if (SpeechRecognition) {
                 recognition = new SpeechRecognition();
@@ -49,30 +44,19 @@
                     isListening = true;
                     startBtn.style.display = 'none';
                     stopBtn.style.display = 'inline-block';
-                    startBtn.classList.add('listening');
                     responseBox.textContent = 'Escuchando...';
                 };
                 
                 recognition.onresult = function(event) {
-                    const transcript = Array.from(event.results)
-                        .map(result => result[0])
-                        .map(result => result.transcript)
-                        .join('');
-                    
+                    const transcript = Array.from(event.results).map(result => result[0].transcript).join('');
                     textInput.value = transcript;
                 };
                 
                 recognition.onend = function() {
-                    if (isListening) {
-                        // Si todavía debería estar escuchando, reinicie el reconocimiento
-                        // (esto ayuda con el límite de tiempo de algunos navegadores)
-                        recognition.start();
-                    } else {
-                        startBtn.style.display = 'inline-block';
-                        stopBtn.style.display = 'none';
-                        startBtn.classList.remove('listening');
-                        responseBox.textContent = 'Reconocimiento de voz detenido.';
-                    }
+                    isListening = false;
+                    startBtn.style.display = 'inline-block';
+                    stopBtn.style.display = 'none';
+                    responseBox.textContent = 'Reconocimiento de voz detenido.';
                 };
                 
                 recognition.onerror = function(event) {
@@ -80,7 +64,6 @@
                     isListening = false;
                     startBtn.style.display = 'inline-block';
                     stopBtn.style.display = 'none';
-                    startBtn.classList.remove('listening');
                     responseBox.textContent = `Error: ${event.error}. Intenta de nuevo.`;
                 };
             } else {
@@ -90,25 +73,12 @@
             }
         }
         
-        // Iniciar reconocimiento de voz
         function startListening() {
             if (recognition) {
-                try {
-                    recognition.start();
-                } catch (error) {
-                    // Si ya está ejecutándose, reinícielo
-                    recognition.stop();
-                    setTimeout(() => recognition.start(), 200);
-                }
-            } else {
-                initializeSpeechRecognition();
-                setTimeout(() => {
-                    if (recognition) recognition.start();
-                }, 200);
+                recognition.start();
             }
         }
         
-        // Detener reconocimiento de voz
         function stopListening() {
             if (recognition) {
                 isListening = false;
@@ -116,88 +86,63 @@
             }
         }
         
-        // Función para enviar la solicitud a la API
         async function sendToAPI(message) {
             try {
                 responseBox.textContent = `Tú: ${message}\n\nConectando con DeepSeek...`;
-                
-                // Codificar el mensaje para usarlo en la URL
                 const encodedMessage = encodeURIComponent(message);
                 const url = `${apiBaseURL}?query=${encodedMessage}`;
                 
                 const response = await fetch(url, {
                     method: 'GET',
-                    headers: {
-                        'Accept': 'application/json'
-                    }
+                    headers: { 'Accept': 'application/json' }
                 });
                 
-                if (!response.ok) {
-                    throw new Error(`Error de API: ${response.status}`);
-                }
+                const text = await response.text();
                 
-                const data = await response.json();
-                return data.response || "No se pudo obtener una respuesta de la API.";
+                try {
+                    const data = JSON.parse(text);
+                    return data.response || "No se pudo obtener una respuesta de la API.";
+                } catch (jsonError) {
+                    console.error("Respuesta no válida de la API:", text);
+                    return `Error: La API devolvió un formato no válido: ${text}`;
+                }
             } catch (error) {
                 console.error("Error al conectar con la API:", error);
-                
-                // Si hay un error de CORS, proporcionar información adicional
-                if (error.message.includes('CORS') || error.message.includes('cross-origin')) {
-                    return `Error de CORS: La API no permite solicitudes desde este origen. Considera habilitar CORS en tu API o usar un proxy.`;
-                }
-                
                 return `Lo siento, hubo un error al conectar con la API: ${error.message}`;
             }
         }
         
-        // Función para procesar y enviar el mensaje
         async function processMessage() {
             const userMessage = textInput.value.trim();
             if (!userMessage) return;
             
-            // Detener el reconocimiento de voz si está activo
             if (isListening) {
                 stopListening();
             }
             
-            // Mostrar el mensaje del usuario
             responseBox.textContent = `Tú: ${userMessage}\n\nProcesando...`;
             
             try {
-                // Enviar el mensaje a la API y obtener la respuesta
                 const apiResponse = await sendToAPI(userMessage);
-                
-                // Mostrar la respuesta
                 responseBox.textContent = `Tú: ${userMessage}\n\nAsistente: ${apiResponse}`;
                 
-                // Opcionalmente, utilizar síntesis de voz para leer la respuesta
                 if (window.speechSynthesis) {
                     const speech = new SpeechSynthesisUtterance(apiResponse);
                     speech.lang = 'es-ES';
                     window.speechSynthesis.speak(speech);
                 }
             } catch (error) {
-                responseBox.textContent = `Tú: ${userMessage}\n\nError: No se pudo procesar tu solicitud. Por favor, intenta de nuevo.`;
+                responseBox.textContent = `Tú: ${userMessage}\n\nError: No se pudo procesar tu solicitud. Intenta de nuevo.`;
             }
             
-            // Limpiar el campo de entrada
             textInput.value = '';
         }
         
-        // Event Listeners
         document.addEventListener('DOMContentLoaded', initializeSpeechRecognition);
-        
         startBtn.addEventListener('click', startListening);
-        
         stopBtn.addEventListener('click', stopListening);
-        
         sendBtn.addEventListener('click', processMessage);
-        
-        textInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                processMessage();
-            }
-        });
+        textInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') processMessage(); });
     </script>
 </body>
 </html>
