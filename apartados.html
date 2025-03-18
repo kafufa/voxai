@@ -186,7 +186,7 @@
             margin-top: 20px;
         }
         
-        /* Estilo para el reloj */
+
         .clock {
             font-size: 24px;
             font-weight: 500;
@@ -260,7 +260,7 @@
     </div>
 
     <script>
-        // Función para actualizar el reloj
+       
         function actualizarReloj() {
             const ahora = new Date();
             const horas = ahora.getHours().toString().padStart(2, '0');
@@ -270,10 +270,10 @@
             document.getElementById('reloj').textContent = `${horas}:${minutos}:${segundos}`;
         }
 
-        // Actualizar el reloj cada segundo
+        
         setInterval(actualizarReloj, 1000);
         
-        // Ejecutar inmediatamente para que no espere 1 segundo para mostrar la hora
+        
         actualizarReloj();
     </script>
 </body>
