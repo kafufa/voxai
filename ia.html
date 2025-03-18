@@ -32,6 +32,7 @@
         // Variables globales
         let recognition;
         let isListening = false;
+        const apiURL = 'https://kafufa.github.io/voxai/backend/env';
         
         // Verificar si el navegador soporta reconocimiento de voz
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -115,8 +116,33 @@
             }
         }
         
+        // Función para enviar la solicitud a la API
+        async function sendToAPI(message) {
+            try {
+                responseBox.textContent = `Tú: ${message}\n\nConectando con DeepSeek...`;
+                
+                const response = await fetch(apiURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ query: message })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Error de API: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                return data.response || "No se pudo obtener una respuesta de la API.";
+            } catch (error) {
+                console.error("Error al conectar con la API:", error);
+                return `Lo siento, hubo un error al conectar con la API: ${error.message}`;
+            }
+        }
+        
         // Función para procesar y enviar el mensaje
-        function processMessage() {
+        async function processMessage() {
             const userMessage = textInput.value.trim();
             if (!userMessage) return;
             
@@ -128,21 +154,25 @@
             // Mostrar el mensaje del usuario
             responseBox.textContent = `Tú: ${userMessage}\n\nProcesando...`;
             
-            // Simular una respuesta de IA (aquí conectarías con tu API real)
-            setTimeout(() => {
-                const responses = [
-                    "Entendido. ¿En qué más puedo ayudarte?",
-                    "Interesante consulta. Déjame procesar esa información.",
-                    "Gracias por tu mensaje. Estoy aquí para asistirte.",
-                    "He recibido tu mensaje. ¿Necesitas algo más específico?",
-                    "Procesando tu solicitud. ¿Hay algo más que deba saber?"
-                ];
-                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                responseBox.textContent = `Tú: ${userMessage}\n\nAsistente: ${randomResponse}`;
+            try {
+                // Enviar el mensaje a la API y obtener la respuesta
+                const apiResponse = await sendToAPI(userMessage);
                 
-                // Limpiar el campo de entrada
-                textInput.value = '';
-            }, 1000);
+                // Mostrar la respuesta
+                responseBox.textContent = `Tú: ${userMessage}\n\nAsistente: ${apiResponse}`;
+                
+                // Opcionalmente, utilizar síntesis de voz para leer la respuesta
+                if (window.speechSynthesis) {
+                    const speech = new SpeechSynthesisUtterance(apiResponse);
+                    speech.lang = 'es-ES';
+                    window.speechSynthesis.speak(speech);
+                }
+            } catch (error) {
+                responseBox.textContent = `Tú: ${userMessage}\n\nError: No se pudo procesar tu solicitud. Por favor, intenta de nuevo.`;
+            }
+            
+            // Limpiar el campo de entrada
+            textInput.value = '';
         }
         
         // Event Listeners
