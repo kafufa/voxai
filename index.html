@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <!-- Pantalla de Login -->
+   
     <div id="login-container" class="container">
         <h2>Iniciar Sesión</h2>
         <input type="text" id="username" placeholder="Usuario">
@@ -24,7 +24,7 @@
     </div>
 
     <script>
-        // Usuarios y contraseñas seguras (simulación)
+      
         const users = {
             "Marouan": "M@r0u@n!2024",
             "Ivan": "1v@n_Seguro99",
@@ -36,7 +36,7 @@
             const password = document.getElementById("password").value;
 
             if (users[username] && users[username] === password) {
-                // Redirigir a la página deseada
+                
                 window.location.href = "https://kafufa.github.io/voxai/apartados.html";
             } else {
                 document.getElementById("login-error").style.display = "block";
