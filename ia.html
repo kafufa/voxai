@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VoxAI - Asistente de Voz</title>
-    <link rel="stylesheet" href="styles2.css">
+   <link rel="stylesheet" href="styles2.css"> 
 </head>
+
 <body>
     <div id="assistant-container" class="container">
         <h1>🤖 VoxAI - Asistente de Voz</h1>
@@ -20,6 +21,144 @@
         <button class="nav-button" onclick="location.href='https://kafufa.github.io/voxai/apartados.html'">Apartados</button>
     </div>
     
-    <script src="scriptIA.js"></script>
+    <script>
+        // Elementos del DOM
+        const startBtn = document.getElementById('start-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const textInput = document.getElementById('text-input');
+        const sendBtn = document.getElementById('send-btn');
+        const responseBox = document.getElementById('response');
+        
+        // Variables globales
+        let recognition;
+        let isListening = false;
+        
+        // Verificar si el navegador soporta reconocimiento de voz
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        
+        // Función para inicializar el reconocimiento de voz
+        function initializeSpeechRecognition() {
+            if (SpeechRecognition) {
+                recognition = new SpeechRecognition();
+                recognition.lang = 'es-ES';
+                recognition.continuous = true;
+                recognition.interimResults = false;
+                
+                recognition.onstart = function() {
+                    isListening = true;
+                    startBtn.style.display = 'none';
+                    stopBtn.style.display = 'inline-block';
+                    startBtn.classList.add('listening');
+                    responseBox.textContent = 'Escuchando...';
+                };
+                
+                recognition.onresult = function(event) {
+                    const transcript = Array.from(event.results)
+                        .map(result => result[0])
+                        .map(result => result.transcript)
+                        .join('');
+                    
+                    textInput.value = transcript;
+                };
+                
+                recognition.onend = function() {
+                    if (isListening) {
+                        // Si todavía debería estar escuchando, reinicie el reconocimiento
+                        // (esto ayuda con el límite de tiempo de algunos navegadores)
+                        recognition.start();
+                    } else {
+                        startBtn.style.display = 'inline-block';
+                        stopBtn.style.display = 'none';
+                        startBtn.classList.remove('listening');
+                        responseBox.textContent = 'Reconocimiento de voz detenido.';
+                    }
+                };
+                
+                recognition.onerror = function(event) {
+                    console.error('Error en reconocimiento de voz:', event.error);
+                    isListening = false;
+                    startBtn.style.display = 'inline-block';
+                    stopBtn.style.display = 'none';
+                    startBtn.classList.remove('listening');
+                    responseBox.textContent = `Error: ${event.error}. Intenta de nuevo.`;
+                };
+            } else {
+                startBtn.disabled = true;
+                startBtn.textContent = '🚫 No soportado';
+                responseBox.textContent = 'Tu navegador no soporta reconocimiento de voz.';
+            }
+        }
+        
+        // Iniciar reconocimiento de voz
+        function startListening() {
+            if (recognition) {
+                try {
+                    recognition.start();
+                } catch (error) {
+                    // Si ya está ejecutándose, reinícielo
+                    recognition.stop();
+                    setTimeout(() => recognition.start(), 200);
+                }
+            } else {
+                initializeSpeechRecognition();
+                setTimeout(() => {
+                    if (recognition) recognition.start();
+                }, 200);
+            }
+        }
+        
+        // Detener reconocimiento de voz
+        function stopListening() {
+            if (recognition) {
+                isListening = false;
+                recognition.stop();
+            }
+        }
+        
+        // Función para procesar y enviar el mensaje
+        function processMessage() {
+            const userMessage = textInput.value.trim();
+            if (!userMessage) return;
+            
+            // Detener el reconocimiento de voz si está activo
+            if (isListening) {
+                stopListening();
+            }
+            
+            // Mostrar el mensaje del usuario
+            responseBox.textContent = `Tú: ${userMessage}\n\nProcesando...`;
+            
+            // Simular una respuesta de IA (aquí conectarías con tu API real)
+            setTimeout(() => {
+                const responses = [
+                    "Entendido. ¿En qué más puedo ayudarte?",
+                    "Interesante consulta. Déjame procesar esa información.",
+                    "Gracias por tu mensaje. Estoy aquí para asistirte.",
+                    "He recibido tu mensaje. ¿Necesitas algo más específico?",
+                    "Procesando tu solicitud. ¿Hay algo más que deba saber?"
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                responseBox.textContent = `Tú: ${userMessage}\n\nAsistente: ${randomResponse}`;
+                
+                // Limpiar el campo de entrada
+                textInput.value = '';
+            }, 1000);
+        }
+        
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', initializeSpeechRecognition);
+        
+        startBtn.addEventListener('click', startListening);
+        
+        stopBtn.addEventListener('click', stopListening);
+        
+        sendBtn.addEventListener('click', processMessage);
+        
+        textInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                processMessage();
+            }
+        });
+    </script>
 </body>
 </html>
