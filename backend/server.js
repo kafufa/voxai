@@ -1,28 +1,37 @@
-// Sample JavaScript code to interact with an API
+// Cargar las variables de entorno
+require('dotenv').config();
+const fetch = require('node-fetch'); // Asegúrate de instalar este paquete si estás usando Node.js
+
+// Función para interactuar con la API
 async function fetchDataFromAPI() {
-  // Replace this with your actual API key, but don't share it publicly
-  const API_KEY = "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";
-  
+  // Obtener la clave de la API desde el archivo .env
+  const API_KEY = process.env.OPENROUTER_API_KEY;
+
+  if (!API_KEY) {
+    console.error('Error: No se encontró la clave API en las variables de entorno.');
+    return;
+  }
+
   try {
     const response = await fetch('https://api.example.com/data', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${API_KEY}`,
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     });
-    
+
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      throw new Error(`Error HTTP: Status ${response.status}`);
     }
-    
+
     const data = await response.json();
-    console.log('Data received:', data);
+    console.log('Datos recibidos:', data);
     return data;
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error('Error al obtener datos de la API:', error.message);
   }
 }
 
-// Call the function
+// Llamar a la función
 fetchDataFromAPI();
