@@ -1,55 +1,28 @@
-const express = require("express");
-const mysql = require("mysql2");
-const bcrypt = require("bcrypt");
-const cors = require("cors");
-
-const app = express();
-app.use(express.json());
-app.use(cors());
-
-// Configuración de la base de datos MySQL
-const db = mysql.createConnection({
-    host: "localhost",
-    user: "root", // Cambia esto según tu configuración
-    password: "Super3", // Si tienes una contraseña, ponla aquí
-    database: "voxai_db"
-});
-
-// Conectar a la base de datos
-db.connect(err => {
-    if (err) {
-        console.error("Error conectando a la base de datos:", err);
-    } else {
-        console.log("Conectado a la base de datos MySQL");
-    }
-});
-
-// Ruta para login
-app.post("/login", (req, res) => {
-    const { username, password } = req.body;
-   
-    const sql = "SELECT * FROM users WHERE username = ?";
-    db.query(sql, [username], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: "Error en el servidor" });
-        }
-
-        if (results.length === 0) {
-            return res.status(401).json({ error: "Usuario no encontrado" });
-        }
-
-        const user = results[0];
-       
-        bcrypt.compare(password, user.password_hash, (err, isMatch) => {
-            if (isMatch) {
-                res.json({ message: "Login exitoso" });
-            } else {
-                res.status(401).json({ error: "Contraseña incorrecta" });
-            }
-        });
+// Sample JavaScript code to interact with an API
+async function fetchDataFromAPI() {
+  // Replace this with your actual API key, but don't share it publicly
+  const API_KEY = "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";
+  
+  try {
+    const response = await fetch('https://api.example.com/data', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json'
+      }
     });
-});
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('Data received:', data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
 
-app.listen(3000, () => {
-    console.log("Servidor corriendo en http://localhost:3000");
-});
+// Call the function
+fetchDataFromAPI();
