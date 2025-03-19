@@ -13,7 +13,7 @@ async function fetchDataFromAPI() {
   }
 
   try {
-    const response = await fetch('https://api.example.com/data', {
+    const response = await fetch('https://github.com/kafufa/voxai/backend/.env', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${API_KEY}`,
