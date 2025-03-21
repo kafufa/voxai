@@ -1,10 +1,8 @@
-// Cargar las variables de entorno
 require('dotenv').config();
-const fetch = require('node-fetch'); // Asegúrate de instalar este paquete si estás usando Node.js
+const fetch = require('node-fetch'); 
 
-// Función para interactuar con la API
 async function fetchDataFromAPI() {
-  // Obtener la clave de la API desde el archivo .env
+ 
   const API_KEY = process.env.OPENROUTER_API_KEY;
 
   if (!API_KEY) {
@@ -32,6 +30,4 @@ async function fetchDataFromAPI() {
     console.error('Error al obtener datos de la API:', error.message);
   }
 }
-
-// Llamar a la función
 fetchDataFromAPI();
