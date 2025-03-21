@@ -2,7 +2,7 @@ require('dotenv').config();
 const fetch = require('node-fetch'); 
 
 async function fetchDataFromAPI() {
- 
+  // Obtén la clave API desde el archivo .env
   const API_KEY = process.env.OPENROUTER_API_KEY;
 
   if (!API_KEY) {
@@ -11,10 +11,11 @@ async function fetchDataFromAPI() {
   }
 
   try {
-    const response = await fetch('https://github.com/kafufa/voxai/backend/.env', {
+    // Asegúrate de usar el endpoint correcto proporcionado por Deep Seek
+    const response = await fetch('https://api.deepseek.com/v1/endpoint', { // Cambia 'endpoint' según sea necesario
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${API_KEY}`,
+        'Authorization': `Bearer ${API_KEY}`, // Incluye la clave API en el encabezado
         'Content-Type': 'application/json',
       },
     });
@@ -30,4 +31,6 @@ async function fetchDataFromAPI() {
     console.error('Error al obtener datos de la API:', error.message);
   }
 }
+
+// Llamada a la función
 fetchDataFromAPI();
