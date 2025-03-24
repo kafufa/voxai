@@ -1,0 +1,33 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { motion } from "framer-motion";
+
+export default function DynamicBlueWeb() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-900 to-blue-500 text-white p-4">
+      <motion.h1 
+        className="text-4xl font-bold mb-6"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        Web Dinámica Azul
+      </motion.h1>
+      
+      <Card className="bg-blue-800 shadow-lg rounded-2xl p-6">
+        <CardContent className="flex flex-col items-center">
+          <p className="text-lg mb-4">Contador: {count}</p>
+          <Button 
+            className="bg-blue-400 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition duration-300"
+            onClick={() => setCount(count + 1)}
+          >
+            Incrementar
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
