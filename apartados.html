@@ -4,31 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apartados</title>
-    <link rel="stylesheet" href="https://kafufa.github.io/voxai/styles3.css">
-   
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #1e3a8a, #2563eb);
+            color: white;
+            text-align: center;
+        }
+
+        header {
+            background: #1e40af;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: #2563eb;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 80vh;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.2rem;
+        }
+
+        .clock {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav>
-            <div class="logo">VoxAI</div>
-            <div class="nav-menu">
-                <button class="nav-button" onclick="location.href='https://v0-new-project-5fnjeaoew8i.vercel.app/'">Asistente</button>
-                <button class="nav-button" onclick="location.href='https://kafufa.github.io/voxai/'">Inicio</button>
-                <button class="nav-button" onclick="location.href='https://kafufa.github.io/voxai/quienessomos/grupo.html'">Quiénes Somos</button>
-            </div>
+        <div class="logo">VoxAI</div>
+        <nav class="nav-menu">
+            <button class="nav-button" onclick="location.href='https://v0-new-project-5fnjeaoew8i.vercel.app/'">Asistente</button>
+            <button class="nav-button" onclick="location.href='https://kafufa.github.io/voxai/'">Inicio</button>
+            <button class="nav-button" onclick="location.href='https://kafufa.github.io/voxai/quienessomos/grupo.html'">Quiénes Somos</button>
         </nav>
     </header>
     
     <div class="main-container">
         <div class="container">
             <h1>VoxAI</h1>
-            <p>Este proyecto nos hemos basado en la alexa u asistentes pero con la ayuda de que tenemos soporte con la api de deepseek. Y tenemos el apapartado que es el visual y luego el físico que es el arduino.</p>
+            <p>Este proyecto nos hemos basado en la Alexa u otros asistentes, pero con el soporte de la API de DeepSeek. Además, contamos con una versión visual y otra física basada en Arduino.</p>
             <div id="reloj" class="clock">00:00:00</div>
         </div>
     </div>
 
     <script>
-       
         function actualizarReloj() {
             const ahora = new Date();
             const horas = ahora.getHours().toString().padStart(2, '0');
@@ -38,10 +107,7 @@
             document.getElementById('reloj').textContent = `${horas}:${minutos}:${segundos}`;
         }
 
-        
         setInterval(actualizarReloj, 1000);
-        
-        
         actualizarReloj();
     </script>
 </body>
