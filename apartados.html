@@ -3,48 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apartados</title>
+    <title>VoxAI - Asistente Inteligente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body {
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-gradient-top: #1e3a8a;
+            --background-gradient-bottom: #2563eb;
+            --text-color: #ffffff;
+            --transparent-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #1e3a8a, #2563eb);
-            color: white;
-            text-align: center;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(to bottom, var(--background-gradient-top), var(--background-gradient-bottom));
+            color: var(--text-color);
+            min-height: 100vh;
+            line-height: 1.6;
+            perspective: 1000px;
+            overflow-x: hidden;
         }
 
         header {
-            background: #1e40af;
-            padding: 15px;
+            background: var(--secondary-color);
+            padding: 1rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transform: translateY(-100%);
+            animation: slide-down 0.8s forwards 0.5s;
+        }
+
+        @keyframes slide-down {
+            to {
+                transform: translateY(0);
+            }
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: transform 0.3s ease;
+            will-change: transform;
+        }
+
+        .logo:hover {
+            transform: scale(1.05) rotate(3deg);
         }
 
         .nav-menu {
             display: flex;
-            gap: 15px;
+            gap: 1rem;
+            opacity: 0;
+            animation: fade-in-nav 0.8s forwards 1s;
+        }
+
+        @keyframes fade-in-nav {
+            to {
+                opacity: 1;
+            }
         }
 
         .nav-button {
-            background: #3b82f6;
-            color: white;
+            background: var(--primary-color);
+            color: var(--text-color);
             border: none;
-            padding: 10px 15px;
-            border-radius: 20px;
+            padding: 0.7rem 1.2rem;
+            border-radius: 25px;
             cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s ease;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            will-change: transform, box-shadow;
+            transform: perspective(500px) rotateX(30deg);
+            opacity: 0;
+            animation: button-entrance 0.6s forwards;
+        }
+
+        @keyframes button-entrance {
+            to {
+                transform: perspective(500px) rotateX(0);
+                opacity: 1;
+            }
         }
 
         .nav-button:hover {
-            background: #2563eb;
+            background: #1d4ed8;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
 
         .main-container {
@@ -52,30 +111,97 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 80vh;
+            min-height: calc(100vh - 80px);
+            padding: 2rem;
+            perspective: 1000px;
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            max-width: 600px;
+            background: var(--transparent-bg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transform: scale(0.7) rotateX(45deg);
+            opacity: 0;
+            animation: content-entrance 1s forwards 1.5s;
+            will-change: transform, opacity;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        @keyframes content-entrance {
+            to {
+                transform: scale(1) rotateX(0);
+                opacity: 1;
+            }
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #ffffff, #a0e7e5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-shift 5s ease infinite;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            transform: translateZ(50px);
         }
 
         p {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 90%;
+            margin: 0 auto 1.5rem;
+            transform: translateZ(30px);
         }
 
         .clock {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: 1rem;
+            color: #f0f0f0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 3px;
+            transform: translateZ(20px);
+            opacity: 0;
+            animation: clock-entrance 0.7s forwards 2s;
+        }
+
+        @keyframes clock-entrance {
+            to {
+                transform: translateZ(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+                margin: 0 1rem;
+            }
         }
     </style>
 </head>
@@ -92,11 +218,10 @@
     <div class="main-container">
         <div class="container">
             <h1>VoxAI</h1>
-            <p>Este proyecto nos hemos basado en la Alexa u otros asistentes, pero con el soporte de la API de DeepSeek. Además, contamos con una versión visual y otra física basada en Arduino.</p>
+            <p>Este proyecto se ha basado en Alexa y otros asistentes, pero con el soporte de la API de DeepSeek. Además, contamos con una versión visual y otra física basada en Arduino.</p>
             <div id="reloj" class="clock">00:00:00</div>
         </div>
     </div>
-
     <script>
         function actualizarReloj() {
             const ahora = new Date();
@@ -106,7 +231,6 @@
             
             document.getElementById('reloj').textContent = `${horas}:${minutos}:${segundos}`;
         }
-
         setInterval(actualizarReloj, 1000);
         actualizarReloj();
     </script>
