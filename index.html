@@ -1,73 +1,75 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html> <!-- # Define el tipo de documento como HTML5 -->
+<html lang="es"> <!-- # Define el idioma del documento como español -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VoxAI - Asistente de Voz</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8"> <!-- # Establece la codificación de caracteres a UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- # Configura la vista para dispositivos móviles -->
+    <title>VoxAI - Asistente de Voz</title> <!-- # Título de la página que aparece en la pestaña del navegador -->
+    <link rel="stylesheet" href="styles.css"> <!-- # Vincula la hoja de estilos CSS -->
 </head>
 <body>
 
-   
-    <div id="login-container" class="container">
-        <h2>Iniciar Sesión</h2>
-        <input type="text" id="username" placeholder="Usuario">
-        <input type="password" id="password" placeholder="Contraseña">
-        <button id="login-btn">Ingresar</button>
-        <p id="login-error" style="color: red; display: none;">Usuario o contraseña incorrectos</p>
+    <div id="login-container" class="container"> <!-- # Contenedor para el formulario de inicio de sesión -->
+        <h2>Iniciar Sesión</h2> <!-- # Título del formulario de inicio de sesión -->
+        <input type="text" id="username" placeholder="Usuario"> <!-- # Campo de entrada para el nombre de usuario -->
+        <input type="password" id="password" placeholder="Contraseña"> <!-- # Campo de entrada para la contraseña -->
+        <button id="login-btn">Ingresar</button> <!-- # Botón para procesar el inicio de sesión -->
+        <p id="login-error" style="color: red; display: none;">Usuario o contraseña incorrectos</p> <!-- # Mensaje de error que se muestra si las credenciales son incorrectas -->
     </div>
 
-    <div id="assistant-container" class="container" style="display: none;">
-        <h2>Asistente de Voz</h2>
-        <button id="start-btn">Comenzar Reconocimiento de Voz</button>
-        <p id="response"></p>
+    <div id="assistant-container" class="container" style="display: none;"> <!-- # Contenedor para el asistente de voz, oculto inicialmente -->
+        <h2>Asistente de Voz</h2> <!-- # Título del asistente de voz -->
+        <button id="start-btn">Comenzar Reconocimiento de Voz</button> <!-- # Botón para iniciar el reconocimiento de voz -->
+        <p id="response"></p> <!-- # Elemento para mostrar la respuesta del asistente de voz -->
     </div>
 
     <script>
-      
+        // # Objeto que almacena los usuarios y sus contraseñas
         const users = {
-            "Marouan": "M@r0u@n!2024",
-            "Ivan": "1v@n_Seguro99",
-            "Noa": "N0a$ClaveXyz"
+            "Marouan": "M@r0u@n!2024", // # Usuario Marouan con su contraseña
+            "Ivan": "1v@n_Seguro99", // # Usuario Ivan con su contraseña
+            "Noa": "N0a$ClaveXyz" // # Usuario Noa con su contraseña
         };
 
+        // # Añade un evento al botón de inicio de sesión para procesar el inicio de sesión
         document.getElementById("login-btn").addEventListener("click", () => {
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
+            const username = document.getElementById("username").value; // # Obtiene el valor del campo de nombre de usuario
+            const password = document.getElementById("password").value; // # Obtiene el valor del campo de contraseña
 
+            // # Comprueba si el usuario existe y si la contraseña es correcta
             if (users[username] && users[username] === password) {
-                
-                window.location.href = "https://kafufa.github.io/voxai/apartados.html";
+                window.location.href = "https://kafufa.github.io/voxai/apartados.html"; // # Redirige a la página del asistente si el inicio de sesión es correcto
             } else {
-                document.getElementById("login-error").style.display = "block";
+                document.getElementById("login-error").style.display = "block"; // # Muestra el mensaje de error si las credenciales son incorrectas
             }
         });
 
+        // # Añade un evento al botón del asistente para iniciar el reconocimiento de voz
         document.getElementById("start-btn").addEventListener("click", () => {
-            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-            recognition.lang = "es-ES";
-            recognition.start();
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)(); // # Inicializa el reconocimiento de voz
+            recognition.lang = "es-ES"; // # Establece el idioma a español
+            recognition.start(); // # Comienza el reconocimiento de voz
 
+            // # Define lo que sucede cuando se recibe un resultado del reconocimiento
             recognition.onresult = function(event) {
-                const transcript = event.results[0][0].transcript;
-                document.getElementById("response").innerText = "Procesando: " + transcript;
-                
+                const transcript = event.results[0][0].transcript; // # Obtiene el texto transcrito del reconocimiento de voz
+                document.getElementById("response").innerText = "Procesando: " + transcript; // # Muestra el texto procesado
+
+                // # Envía la transcripción a un endpoint para procesarla
                 fetch("https://hook.eu2.make.com/sw3ligopuhaxs11xorsf61ia5apje4hy", { 
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ query: transcript })
+                    method: "POST", // # Método POST para enviar datos
+                    headers: { "Content-Type": "application/json" }, // # Establece el tipo de contenido como JSON
+                    body: JSON.stringify({ query: transcript }) // # Convierte el objeto a JSON
                 })
-                .then(response => response.json())
+                .then(response => response.json()) // # Convierte la respuesta a JSON
                 .then(data => {
-                    document.getElementById("response").innerText = "Respuesta: " + data.response;
+                    document.getElementById("response").innerText = "Respuesta: " + data.response; // # Muestra la respuesta del asistente
                 })
                 .catch(error => {
-                    console.error("Error:", error);
-                    document.getElementById("response").innerText = "Hubo un error. Inténtalo de nuevo.";
+                    console.error("Error:", error); // # Muestra el error en la consola
+                    document.getElementById("response").innerText = "Hubo un error. Inténtalo de nuevo."; // # Mensaje de error en caso de fallo
                 });
             };
         });
     </script>
 </body>
 </html>
-
