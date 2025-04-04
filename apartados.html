@@ -1,238 +1,282 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html> 
+<html lang="es"> 
+<!-- Define el tipo de documento y el idioma de la página -->
+<head> 
+    <meta charset="UTF-8"> 
+    <!-- Define la codificación de caracteres como UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <!-- Configura la vista para que sea responsiva en dispositivos móviles -->
     <title>VoxAI - Asistente Inteligente</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Establece el título de la pestaña del navegador -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"> 
+    <!-- Vincula la fuente "Poppins" de Google Fonts -->
     <style>
-        :root {
-            --primary-color: #2563eb;
-            --secondary-color: #1e40af;
-            --background-gradient-top: #1e3a8a;
-            --background-gradient-bottom: #2563eb;
-            --text-color: #ffffff;
-            --transparent-bg: rgba(255, 255, 255, 0.1);
+        :root { 
+            /* Define variables CSS en :root para facilitar el mantenimiento */
+            --primary-color: #2563eb; /* Color primario de la página */
+            --secondary-color: #1e40af; /* Color secundario para el encabezado */
+            --background-gradient-top: #1e3a8a; /* Color superior del degradado de fondo */
+            --background-gradient-bottom: #2563eb; /* Color inferior del degradado de fondo */
+            --text-color: #ffffff; /* Color de texto principal */
+            --transparent-bg: rgba(255, 255, 255, 0.1); /* Fondo transparente blanco */
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { 
+            /* Selectores universales para aplicar estilos generales */
+            margin: 0; /* Elimina el margen por defecto */
+            padding: 0; /* Elimina el padding por defecto */
+            box-sizing: border-box; /* Incluye padding y borde en el ancho y alto total de los elementos */
         }
 
-        body {
-            font-family: 'Poppins', Arial, sans-serif;
-            background: linear-gradient(to bottom, var(--background-gradient-top), var(--background-gradient-bottom));
-            color: var(--text-color);
-            min-height: 100vh;
-            line-height: 1.6;
-            perspective: 1000px;
-            overflow-x: hidden;
+        body { 
+            /* Estilo del cuerpo de la página */
+            font-family: 'Poppins', Arial, sans-serif; /* Establece la fuente para el cuerpo */
+            background: linear-gradient(to bottom, var(--background-gradient-top), var(--background-gradient-bottom)); /* Degradado de fondo vertical */
+            color: var(--text-color); /* Color del texto */
+            min-height: 100vh; /* Mínima altura del cuerpo para ocupar toda la ventana */
+            line-height: 1.6; /* Espacio entre líneas */
+            perspective: 1000px; /* Crea una perspectiva para los elementos hijos en 3D */
+            overflow-x: hidden; /* Oculta el desbordamiento horizontal */
         }
 
-        header {
-            background: var(--secondary-color);
-            padding: 1rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            transform: translateY(-100%);
-            animation: slide-down 0.8s forwards 0.5s;
+        header { 
+            /* Estilo para el encabezado */
+            background: var(--secondary-color); /* Color de fondo del encabezado */
+            padding: 1rem 5%; /* Padding del encabezado */
+            display: flex; /* Establece el encabezado como flex container */
+            justify-content: space-between; /* Espacia los elementos en el encabezado */
+            align-items: center; /* Centra verticalmente los elementos */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra debajo del encabezado */
+            position: sticky; /* Mantiene el encabezado fijo en la parte superior al hacer scroll */
+            top: 0; /* Posición fija en la parte superior */
+            z-index: 100; /* Asegura que el encabezado esté por encima de otros elementos */
+            transform: translateY(-100%); /* Inicialmente oculta el encabezado */
+            animation: slide-down 0.8s forwards 0.5s; /* Animación para deslizar el encabezado hacia abajo */
         }
 
-        @keyframes slide-down {
-            to {
-                transform: translateY(0);
+        @keyframes slide-down { 
+            /* Animación para el encabezado */
+            to { 
+                transform: translateY(0); /* Lleva el encabezado a su posición original */
             }
         }
 
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            transition: transform 0.3s ease;
-            will-change: transform;
+        .logo { 
+            /* Estilo para el logo */
+            font-size: 1.8rem; /* Tamaño de fuente del logo */
+            font-weight: 600; /* Grosor de la fuente */
+            letter-spacing: 1px; /* Espaciado entre letras */
+            transition: transform 0.3s ease; /* Transición suave para transformaciones */
+            will-change: transform; /* Se anticipa un cambio en el transform */
         }
 
-        .logo:hover {
-            transform: scale(1.05) rotate(3deg);
+        .logo:hover { 
+            /* Efecto hover en el logo */
+            transform: scale(1.05) rotate(3deg); /* Aumenta el tamaño y rota el logo */
         }
 
-        .nav-menu {
-            display: flex;
-            gap: 1rem;
-            opacity: 0;
-            animation: fade-in-nav 0.8s forwards 1s;
+        .nav-menu { 
+            /* Estilo para el menú de navegación */
+            display: flex; /* Establece como flex container */
+            gap: 1rem; /* Espacio entre los botones del menú */
+            opacity: 0; /* Inicialmente invisible */
+            animation: fade-in-nav 0.8s forwards 1s; /* Animación para aparecimiento del menú */
         }
 
-        @keyframes fade-in-nav {
-            to {
-                opacity: 1;
+        @keyframes fade-in-nav { 
+            /* Animación para la opacidad del menú */
+            to { 
+                opacity: 1; /* Lo hace completamente visible */
             }
         }
 
-        .nav-button {
-            background: var(--primary-color);
-            color: var(--text-color);
-            border: none;
-            padding: 0.7rem 1.2rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            will-change: transform, box-shadow;
-            transform: perspective(500px) rotateX(30deg);
-            opacity: 0;
-            animation: button-entrance 0.6s forwards;
+        .nav-button { 
+            /* Estilo para los botones de navegación */
+            background: var(--primary-color); /* Color de fondo del botón */
+            color: var(--text-color); /* Color del texto en el botón */
+            border: none; /* Sin borde */
+            padding: 0.7rem 1.2rem; /* Padding interno */
+            border-radius: 25px; /* Bordes redondeados */
+            cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+            font-weight: 500; /* Grosor del texto */
+            transition: all 0.3s ease; /* Transición suave para todos los cambios */
+            text-transform: uppercase; /* Texto en mayúsculas */
+            letter-spacing: 0.5px; /* Espacio extra entre letras */
+            will-change: transform, box-shadow; /* Se anticipa cambios en transform y sombra */
+            transform: perspective(500px) rotateX(30deg); /* Crea un efecto 3D en el botón */
+            opacity: 0; /* Inicialmente invisible */
+            animation: button-entrance 0.6s forwards; /* Animación para la entrada del botón */
         }
 
-        @keyframes button-entrance {
-            to {
-                transform: perspective(500px) rotateX(0);
-                opacity: 1;
+        @keyframes button-entrance { 
+            /* Animación para la entrada del botón */
+            to { 
+                transform: perspective(500px) rotateX(0); /* Lleva el botón a su posición original */
+                opacity: 1; /* Hace el botón visible */
             }
         }
 
-        .nav-button:hover {
-            background: #1d4ed8;
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        .nav-button:hover { 
+            /* Efecto hover para los botones */
+            background: #1d4ed8; /* Cambia al color más oscuro al pasar el mouse */
+            transform: translateY(-3px) scale(1.05); /* Levanta y escala el botón al pasar el mouse */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Añade sombra al botón */
         }
 
-        .main-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: calc(100vh - 80px);
-            padding: 2rem;
-            perspective: 1000px;
+        .main-container { 
+            /* Estilo para el contenedor principal */
+            display: flex; /* Establece como flex container */
+            flex-direction: column; /* Coloca los elementos en una columna */
+            align-items: center; /* Centra los elementos horizontalmente */
+            justify-content: center; /* Centra verticalmente los elementos */
+            min-height: calc(100vh - 80px); /* Mínima altura menos la altura del header */
+            padding: 2rem; /* Padding interior */
+            perspective: 1000px; /* Crea una perspectiva para los elementos hijos */
         }
 
-        .container {
-            background: var(--transparent-bg);
-            padding: 2.5rem;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            max-width: 700px;
-            width: 100%;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            transform: scale(0.7) rotateX(45deg);
-            opacity: 0;
-            animation: content-entrance 1s forwards 1.5s;
-            will-change: transform, opacity;
-            border: 1px solid rgba(255,255,255,0.1);
+        .container { 
+            /* Estilo para el contenedor de contenido */
+            background: var(--transparent-bg); /* Fondo semi-transparente */
+            padding: 2.5rem; /* Padding interno */
+            border-radius: 20px; /* Bordes redondeados */
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); /* Sombra alrededor del contenedor */
+            max-width: 700px; /* Ancho máximo del contenedor */
+            width: 100%; /* Ancho del contenedor al 100% */
+            text-align: center; /* Centra el texto dentro del contenedor */
+            backdrop-filter: blur(10px); /* Aplica un desenfoque en el fondo */
+            transform: scale(0.7) rotateX(45deg); /* Escala y rota el contenedor */
+            opacity: 0; /* Inicialmente invisible */
+            animation: content-entrance 1s forwards 1.5s; /* Animación de entrada del contenido */
+            will-change: transform, opacity; /* Se anticipa cambios en transform y opacidad */
+            border: 1px solid rgba(255,255,255,0.1); /* Borde del contenedor */
         }
 
-        @keyframes content-entrance {
-            to {
-                transform: scale(1) rotateX(0);
-                opacity: 1;
+        @keyframes content-entrance { 
+            /* Animación de entrada para el contenido */
+            to { 
+                transform: scale(1) rotateX(0); /* Lleva el contenido a su posición original */
+                opacity: 1; /* Hace el contenido visible */
             }
         }
 
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(to right, #ffffff, #a0e7e5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradient-shift 5s ease infinite;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            transform: translateZ(50px);
+        h1 { 
+            /* Estilo para el encabezado principal */
+            font-size: 3rem; /* Tamaño del texto */
+            margin-bottom: 1rem; /* Margen inferior */
+            background: linear-gradient(to right, #ffffff, #a0e7e5); /* Degradado de fondo para el texto */
+            -webkit-background-clip: text; /* Recorta el fondo al borde del texto */
+            -webkit-text-fill-color: transparent; /* Hace que el texto sea transparente */
+            animation: gradient-shift 5s ease infinite; /* Animación de cambio de degradado */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3); /* Sombra del texto */
+            transform: translateZ(50px); /* Crea un efecto de profundidad */
         }
 
-        p {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.9);
-            max-width: 90%;
-            margin: 0 auto 1.5rem;
-            transform: translateZ(30px);
+        p { 
+            /* Estilo para los párrafos */
+            font-size: 1.1rem; /* Tamaño de la fuente */
+            color: rgba(255, 255, 255, 0.9); /* Color del texto */
+            max-width: 90%; /* Ancho máximo del párrafo */
+            margin: 0 auto 1.5rem; /* Margen automático a los lados y margen inferior */
+            transform: translateZ(30px); /* Efecto de profundidad */
         }
 
-        .clock {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-top: 1rem;
-            color: #f0f0f0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            letter-spacing: 3px;
-            transform: translateZ(20px);
-            opacity: 0;
-            animation: clock-entrance 0.7s forwards 2s;
+        .clock { 
+            /* Estilo para el reloj */
+            font-size: 2.5rem; /* Tamaño de la fuente */
+            font-weight: bold; /* Grosor del texto */
+            margin-top: 1rem; /* Margen superior */
+            color: #f0f0f0; /* Color del texto */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Sombra del texto */
+            letter-spacing: 3px; /* Espaciado entre letras */
+            transform: translateZ(20px); /* Efecto de profundidad */
+            opacity: 0; /* Inicialmente invisible */
+            animation: clock-entrance 0.7s forwards 2s; /* Animación de entrada del reloj */
         }
 
-        @keyframes clock-entrance {
-            to {
-                transform: translateZ(0);
-                opacity: 1;
+        @keyframes clock-entrance { 
+            /* Animación para el reloj */
+            to { 
+                transform: translateZ(0); /* Lleva el reloj a su posición original */
+                opacity: 1; /* Lo hace visible */
             }
         }
 
-        @keyframes gradient-shift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @keyframes gradient-shift { 
+            /* Animación para el cambio de degradado del título */
+            0% { background-position: 0% 50%; } /* Inicio en la posición inicial */
+            50% { background-position: 100% 50%; } /* Medio movimiento hacia la derecha */
+            100% { background-position: 0% 50%; } /* Regresa a la posición inicial */
         }
 
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 1rem;
+        @media (max-width: 768px) { 
+            /* Media query para pantallas pequeñas */
+            header { 
+                flex-direction: column; /* Cambia la dirección a columna */
+                gap: 1rem; /* Espacio entre los elementos del header */
             }
 
-            .nav-menu {
-                flex-wrap: wrap;
-                justify-content: center;
+            .nav-menu { 
+                flex-wrap: wrap; /* Permite que el menú se ajuste en varias líneas */
+                justify-content: center; /* Centra los elementos del menú */
             }
 
-            h1 {
-                font-size: 2.2rem;
+            h1 { 
+                font-size: 2.2rem; /* Tamaño de fuente más pequeño para el encabezado */
             }
 
-            .container {
-                padding: 1.5rem;
-                margin: 0 1rem;
+            .container { 
+                padding: 1.5rem; /* Menos padding para el contenedor */
+                margin: 0 1rem; /* Margen lateral para el contenedor */
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="logo">VoxAI</div>
-        <nav class="nav-menu">
+        <div class="logo">VoxAI</div> 
+        <!-- Elemento que muestra el logo de la página -->
+        <nav class="nav-menu"> 
+            <!-- Contenedor de navegación -->
             <button class="nav-button" onclick="location.href='https://v0-vox-ai.vercel.app/'">Asistente</button>
-            <button class="nav-button" onclick="location.href='https://kafufa.github.io/voxai/'">Inicio</button>
-            <button class="nav-button" onclick="location.href='https://kafufa.github.io/voxai/quienessomos/grupo.html'">Quiénes Somos</button>
+            <!-- Botón de navegación que redirige a la aplicación asistente -->
+            <button class="nav-button" onclick="location.href='https://kafufa.github.io/voxai/'">Inicio</button> 
+            <!-- Botón que redirige a la página de inicio -->
+            <button class="nav-button" onclick="location.href='https://kafufa.github.io/voxai/quienessomos/grupo.html'">Quiénes Somos</button> 
+            <!-- Botón que lleva a la sección "Quiénes Somos" -->
         </nav>
     </header>
     
-    <div class="main-container">
-        <div class="container">
-            <h1>VoxAI</h1>
-            <p>Este proyecto se ha basado en Alexa y otros asistentes, pero con el soporte de la API de DeepSeek. Además, contamos con una versión visual y otra física basada en Arduino.</p>
-            <div id="reloj" class="clock">00:00:00</div>
+    <div class="main-container"> 
+        <!-- Contenedor principal de contenido -->
+        <div class="container"> 
+            <!-- Contenedor que alberga el contenido interior -->
+            <h1>VoxAI</h1> 
+            <!-- Título principal del proyecto -->
+            <p>Este proyecto se ha basado en Alexa y otros asistentes, pero con el soporte de la API de DeepSeek. Además, contamos con una versión visual y otra física basada en Arduino.</p> 
+            <!-- Descripción del proyecto -->
+            <div id="reloj" class="clock">00:00:00</div> 
+            <!-- Elemento para mostrar la hora, inicialmente con un valor estático -->
         </div>
     </div>
     <script>
-        function actualizarReloj() {
-            const ahora = new Date();
-            const horas = ahora.getHours().toString().padStart(2, '0');
-            const minutos = ahora.getMinutes().toString().padStart(2, '0');
-            const segundos = ahora.getSeconds().toString().padStart(2, '0');
+        function actualizarReloj() { 
+            // Función que actualiza la hora del reloj
+            const ahora = new Date(); 
+            // Obtiene la fecha y hora actuales
+            const horas = ahora.getHours().toString().padStart(2, '0'); 
+            // Obtiene las horas como cadena y añade un cero si es necesario
+            const minutos = ahora.getMinutes().toString().padStart(2, '0'); 
+            // Obtiene los minutos como cadena
+            const segundos = ahora.getSeconds().toString().padStart(2, '0'); 
+            // Obtiene los segundos como cadena
             
-            document.getElementById('reloj').textContent = `${horas}:${minutos}:${segundos}`;
+            document.getElementById('reloj').textContent = `${horas}:${minutos}:${segundos}`; 
+            // Actualiza el contenido del div del reloj con la hora actual
         }
-        setInterval(actualizarReloj, 1000);
-        actualizarReloj();
+        setInterval(actualizarReloj, 1000); 
+        // Llama la función actualizarReloj cada 1000 ms (1 segundo)
+        actualizarReloj(); 
+        // Llama a la función inmediatamente para evitar esperar 1 segundo
     </script>
 </body>
 </html>
