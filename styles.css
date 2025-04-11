@@ -1,205 +1,191 @@
 body {
-    font-family: 'Poppins', sans-serif; /* Establece la fuente del texto a Poppins o sans-serif si no está disponible */
-    background: linear-gradient(120deg, #1E3C72, #2A5298, #1E3C72); /* Crea un fondo con un degradado en un ángulo de 120 grados */
-    color: #f0f0f0; /* Establece el color del texto a un gris claro */
-    text-align: center; /* Centra el texto en el cuerpo */
-    margin: 0; /* Elimina el margen por defecto del cuerpo */
-    padding: 0; /* Elimina el padding por defecto del cuerpo, aplastando el contenido dentro */
-    display: flex; /* Utiliza flexbox para el diseño del cuerpo */
-    justify-content: center; /* Centra los elementos hijos horizontalmente */
-    align-items: center; /* Centra los elementos hijos verticalmente */
-    height: 100vh; /* Establece la altura del cuerpo al 100% de la altura de la ventana */
-    overflow: hidden; /* Oculta el contenido que desborda el área visible */
-    animation: /* Define una animación múltiple para el cuerpo */
-        background-animation 7s infinite alternate ease-in-out, /* Animación de fondo que se repite infinitamente */
-        fadeInBody 2s ease-out; /* Animación de desvanecimiento al aparecer el cuerpo */
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(120deg, #1E3C72, #2A5298, #1E3C72);
+    color: #f0f0f0;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    animation: 
+        background-animation 10s infinite alternate ease-in-out, 
+        fadeInBody 3s ease-out;
 }
 
-@keyframes fadeInBody { /* Define la animación de desvanecimiento al aparecer */
+@keyframes fadeInBody {
     from { 
-        opacity: 0; /* Comienza completamente transparente */
-        filter: blur(10px); /* Comienza con un desenfoque */
+        opacity: 0;
+        filter: blur(15px); /* Mayor desenfoque inicial */
     }
     to { 
-        opacity: 1; /* Termina completamente opaco */
-        filter: blur(0); /* Sin desenfoque al final */
+        opacity: 1; 
+        filter: blur(0);
     }
 }
 
-@keyframes background-animation { /* Define la animación para el movimiento del fondo */
-    0% { background-position: 0% 50%; } /* Comienza en la posición inicial */
-    100% { background-position: 100% 50%; } /* Termina con el fondo desplazado completamente a la derecha */
+@keyframes background-animation {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
 }
 
 .container {
-    background: rgba(255, 255, 255, 0.15); /* Fondo semi-transparente blanco para el contenedor */
-    backdrop-filter: blur(10px); /* Aplica un desenfoque al fondo detrás del contenedor */
-    padding: 40px; /* Añade padding interno al contenedor */
-    border-radius: 20px; /* Redondea las esquinas del contenedor */
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.4); /* Añade una sombra difusa alrededor del contenedor */
-    max-width: 600px; /* Establece el ancho máximo del contenedor */
-    width: 90%; /* Establece el ancho del contenedor al 90% del área disponible */
-    text-align: center; /* Centra el texto dentro del contenedor */
-    animation: /* Define varias animaciones para el contenedor */
-        slideIn 1.5s ease-in-out, /* Desliza el contenedor al entrar en vista */
-        floatAnimation 4s ease-in-out infinite alternate; /* Hace que el contenedor flote hacia arriba y abajo infinitamente */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+    max-width: 600px;
+    width: 90%;
+    text-align: center;
+    animation: 
+        slideIn 2s ease-in-out, 
+        floatAnimation 6s ease-in-out infinite alternate;
 }
 
-@keyframes slideIn { /* Define la animación cuando el contenedor entra en vista */
+@keyframes slideIn {
     from { 
-        transform: translateY(-50px); /* Comienza trasladado hacia arriba */
-        opacity: 0; /* Comienza completamente transparente */
+        transform: translateY(-30px); /* Menor desplazamiento */
+        opacity: 0; 
     }
     to { 
-        transform: translateY(0); /* Termina en su posición original */
-        opacity: 1; /* Termina completamente opaco */
+        transform: translateY(0); 
+        opacity: 1; 
     }
 }
 
-@keyframes floatAnimation { /* Define la animación que hace flotar el contenedor */
+@keyframes floatAnimation {
     0% { 
-        transform: translateY(0); /* Comienza en su posición original */
+        transform: translateY(0); 
     }
     100% { 
-        transform: translateY(-15px); /* Flota hacia arriba al final de la animación */
+        transform: translateY(-10px); /* Menor desplazamiento */
     }
 }
 
 h1 {
-    font-size: 36px; /* Establece el tamaño de fuente del encabezado h1 */
-    margin-bottom: 20px; /* Añade un margen inferior al encabezado */
-    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4); /* Añade una sombra al texto */
-    letter-spacing: 2px; /* Espacia las letras del encabezado */
-    animation: /* Define varias animaciones para el encabezado */
-        textReveal 2s ease-out, /* Revela el texto al aparecer */
-        textGlow 3s ease-in-out infinite alternate; /* Hace que el texto brille alternadamente */
+    font-size: 36px;
+    margin-bottom: 20px;
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+    letter-spacing: 2px;
+    animation: 
+        textReveal 3s ease-out, 
+        textGlow 5s ease-in-out infinite alternate; /* Aumentar duración de animación */
 }
 
-@keyframes textReveal { /* Define la animación para revelar el texto */
+@keyframes textReveal {
     from {
-        opacity: 0; /* Comienza completamente transparente */
-        transform: translateX(-50px); /* Comienza trasladado hacia la izquierda */
+        opacity: 0; 
+        transform: translateX(-30px); /* Menor desplazamiento */
     }
     to {
-        opacity: 1; /* Termina completamente opaco */
-        transform: translateX(0); /* Termina en su posición original */
+        opacity: 1; 
+        transform: translateX(0); 
     }
 }
 
-@keyframes textGlow { /* Define la animación de brillo para el texto */
+@keyframes textGlow {
     0% {
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); /* Brillo inicial del texto */
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
     }
     100% {
-        text-shadow: 0 0 20px rgba(255, 255, 255, 0.7); /* Brillo final del texto */
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
     }
 }
 
 p {
-    font-size: 20px; /* Establece el tamaño de fuente para párrafos */
-    margin-bottom: 25px; /* Añade un margen inferior a los párrafos */
-    line-height: 1.6; /* Establece el espacio entre líneas */
-    color: rgba(255, 255, 255, 0.9); /* Establece el color del texto de los párrafos */
-    animation: /* Define varias animaciones para los párrafos */
-        slideInFromRight 2s ease-out, /* Hace que el párrafo se deslice desde la derecha al aparecer */
-        subtleHover 4s ease-in-out infinite alternate; /* Hace que el párrafo suba y baje ligeramente */
+    font-size: 20px;
+    margin-bottom: 25px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+    animation: 
+        slideInFromRight 3s ease-out, 
+        subtleHover 5s ease-in-out infinite alternate;
 }
 
-@keyframes slideInFromRight { /* Define la animación para deslizar el párrafo desde la derecha */
+@keyframes slideInFromRight {
     from {
-        opacity: 0; /* Comienza completamente transparente */
-        transform: translateX(50px); /* Comienza trasladado hacia la derecha */
+        opacity: 0; 
+        transform: translateX(30px); /* Menor desplazamiento */
     }
     to {
-        opacity: 1; /* Termina completamente opaco */
-        transform: translateX(0); /* Termina en su posición original */
+        opacity: 1; 
+        transform: translateX(0); 
     }
 }
 
-@keyframes subtleHover { /* Define la animación que hace que el párrafo se mueva suavemente */
-    0% {
-        transform: translateY(0); /* Comienza en su posición original */
-    }
-    100% {
-        transform: translateY(-5px); /* Termina moviéndose 5px hacia arriba */
-    }
+@keyframes subtleHover {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-3px); } /* Menor desplazamiento */
 }
 
 button {
-    background: linear-gradient(to right, #FFC107, #FF8C00); /* Establece un fondo degradado para el botón */
-    color: #ffffff; /* Establece el color del texto del botón a blanco */
-    border: none; /* Elimina el borde del botón */
-    padding: 15px 30px; /* Añade padding interno al botón */
-    font-size: 18px; /* Establece el tamaño de fuente del botón */
-    border-radius: 10px; /* Redondea las esquinas del botón */
-    cursor: pointer; /* Cambia el cursor a puntero al pasar el mouse sobre el botón */
-    transition: all 0.3s ease; /* Añade una transición suave para todos los cambios */
-    font-weight: bold; /* Establece el peso del texto del botón a negrita */
-    box-shadow: 0 5px 20px rgba(255, 140, 0, 0.4); /* Añade una sombra difusa al botón */
-    animation: /* Define varias animaciones para el botón */
-        popIn 1.2s ease-out, /* Hace que el botón aparezca escalando */
-        pulse 2.5s ease-in-out infinite; /* Hace que el botón pulse infinitamente */
+    background: linear-gradient(to right, #FFC107, #FF8C00);
+    color: #ffffff;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.4s ease, box-shadow 0.4s ease; /* Suavizar transición */
+    font-weight: bold;
+    box-shadow: 0 5px 20px rgba(255, 140, 0, 0.4);
+    animation: 
+        popIn 1.5s ease-out, 
+        pulse 3s ease-in-out infinite; /* Aumentar duración de animación */
 }
 
-@keyframes popIn { /* Define la animación de escalado para el botón */
+@keyframes popIn {
     from {
-        transform: scale(0.8); /* Comienza más pequeño */
-        opacity: 0; /* Comienza completamente transparente */
+        transform: scale(0.9); /* Comienza más pequeño */
+        opacity: 0;
     }
     to {
-        transform: scale(1); /* Termina al tamaño original */
-        opacity: 1; /* Termina completamente opaco */
+        transform: scale(1); 
+        opacity: 1; 
     }
 }
 
-@keyframes pulse { /* Define la animación de pulso para el botón */
-    0% {
-        transform: scale(1); /* Comienza al tamaño original */
-    }
-    50% {
-        transform: scale(1.05); /* Se escala ligeramente más grande */
-    }
-    100% {
-        transform: scale(1); /* Termina al tamaño original */
-    }
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
-button:hover { /* Efectos al pasar el mouse sobre el botón */
-    background: linear-gradient(to right, #FF8C00, #FFC107); /* Cambia el degradado del fondo */
-    transform: translateY(-5px) scale(1.1); /* Mueve el botón hacia arriba y lo escala un poco más grande */
-    box-shadow: 0 10px 30px rgba(255, 140, 0, 0.6); /* Aumenta la sombra difusa del botón */
+button:hover {
+    background: linear-gradient(to right, #FF8C00, #FFC107);
+    transform: translateY(-3px) scale(1.05); /* Menor desplazamiento y escala */
+    box-shadow: 0 10px 30px rgba(255, 140, 0, 0.6);
 }
 
-#response { /* Estiliza el elemento de respuesta */
-    margin-top: 25px; /* Añade un margen superior */
-    font-size: 22px; /* Establece el tamaño de fuente para la respuesta */
-    font-weight: bold; /* Establece el peso del texto a negrita */
-    background: rgba(0, 0, 0, 0.3); /* Establece un fondo semi-transparente negro */
-    color: #fff; /* Establece el color del texto a blanco */
-    padding: 15px; /* Añade padding interno al elemento de respuesta */
-    border-radius: 10px; /* Redondea las esquinas del elemento de respuesta */
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.25); /* Añade una sombra al elemento de respuesta */
-    animation: /* Define varias animaciones para el elemento de respuesta */
-        fadeInResponse 1.5s ease-in-out, /* Hace que la respuesta se desvanezca al aparecer */
-        responseShimmer 3s ease-in-out infinite alternate; /* Hace que el fondo brille alternadamente */
+#response {
+    margin-top: 25px;
+    font-size: 22px;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.25);
+    animation: 
+        fadeInResponse 2s ease-in-out, 
+        responseShimmer 4s ease-in-out infinite alternate; /* Aumentar duración de animación */
 }
 
-@keyframes fadeInResponse { /* Define la animación para desvanecer la respuesta */
+@keyframes fadeInResponse {
     from { 
-        opacity: 0; /* Comienza completamente transparente */
-        transform: scale(0.95); /* Comienza un poco más pequeño */
+        opacity: 0; 
+        transform: scale(0.95); 
     }
     to { 
-        opacity: 1; /* Termina completamente opaco */
-        transform: scale(1); /* Termina en su tamaño original */
+        opacity: 1; 
+        transform: scale(1); 
     }
 }
 
-@keyframes responseShimmer { /* Define la animación de brillo para la respuesta */
-    0% {
-        background-position: -100% 0; /* Comienza el brillo en la posición inicial */
-    }
-    100% {
-        background-position: 100% 0; /* Termina el brillo desplazado completamente a la derecha */
-    }
+@keyframes responseShimmer {
+    0% { background-position: -100% 0; }
+    100% { background-position: 100% 0; }
 }
