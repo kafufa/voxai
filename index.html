@@ -1,74 +1,291 @@
-<!DOCTYPE html> <!-- # Define el tipo de documento como HTML5 -->
-<html lang="es"> <!-- # Define el idioma del documento como español -->
+<!DOCTYPE html>
+<html lang="es">
 <head>
-    <meta charset="UTF-8"> <!-- # Establece la codificación de caracteres a UTF-8 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- # Configura la vista para dispositivos móviles -->
-    <title>VoxAI - Asistente de Voz</title> <!-- # Título de la página que aparece en la pestaña del navegador -->
-    <link rel="stylesheet" href="styles.css"> <!-- # Vincula la hoja de estilos CSS -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="VoxAI - Tu asistente de voz personal">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>VoxAI - Asistente de Voz</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <main>
+        <!-- Contenedor para el formulario de inicio de sesión -->
+        <section id="login-container" class="container">
+            <h1>VoxAI - Tu Asistente de Voz</h1>
+            <form id="login-form" action="#" method="post" autocomplete="off">
+                <h2>Iniciar Sesión</h2>
+                <div class="form-group">
+                    <label for="username">Usuario</label>
+                    <input type="text" id="username" name="username" placeholder="Ingresa tu usuario" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required>
+                        <button type="button" id="toggle-password" aria-label="Mostrar contraseña">
+                            <span class="eye-icon">👁️</span>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" id="login-btn" class="primary-btn">Ingresar</button>
+                <div id="login-error" class="error-message" role="alert" aria-live="assertive"></div>
+            </form>
+        </section>
 
-    <div id="login-container" class="container"> <!-- # Contenedor para el formulario de inicio de sesión -->
-        <h2>Iniciar Sesión</h2> <!-- # Título del formulario de inicio de sesión -->
-        <input type="text" id="username" placeholder="Usuario"> <!-- # Campo de entrada para el nombre de usuario -->
-        <input type="password" id="password" placeholder="Contraseña"> <!-- # Campo de entrada para la contraseña -->
-        <button id="login-btn">Ingresar</button> <!-- # Botón para procesar el inicio de sesión -->
-        <p id="login-error" style="color: red; display: none;">Usuario o contraseña incorrectos</p> <!-- # Mensaje de error que se muestra si las credenciales son incorrectas -->
-    </div>
+        <!-- Contenedor para el asistente de voz -->
+        <section id="assistant-container" class="container hidden">
+            <h2>Asistente de Voz</h2>
+            <div class="voice-controls">
+                <button id="start-btn" class="voice-btn">
+                    <span class="mic-icon">🎤</span>
+                    <span class="btn-text">Comenzar Reconocimiento</span>
+                </button>
+                <button id="stop-btn" class="voice-btn hidden">
+                    <span class="stop-icon">⏹️</span>
+                    <span class="btn-text">Detener</span>
+                </button>
+            </div>
+            <div class="status-indicator">
+                <span id="status-text">Esperando...</span>
+                <div id="waves" class="hidden">
+                    <span class="wave"></span>
+                    <span class="wave"></span>
+                    <span class="wave"></span>
+                </div>
+            </div>
+            <div id="response-container" class="response-box" role="region" aria-live="polite">
+                <p id="response"></p>
+            </div>
+            <button id="logout-btn" class="secondary-btn">Cerrar Sesión</button>
+        </section>
+    </main>
 
-    <div id="assistant-container" class="container" style="display: none;"> <!-- # Contenedor para el asistente de voz, oculto inicialmente -->
-        <h2>Asistente de Voz</h2> <!-- # Título del asistente de voz -->
-        <button id="start-btn">Comenzar Reconocimiento de Voz</button> <!-- # Botón para iniciar el reconocimiento de voz -->
-        <p id="response"></p> <!-- # Elemento para mostrar la respuesta del asistente de voz -->
-    </div>
+    <footer>
+        <p>&copy; 2025 VoxAI - Todos los derechos reservados</p>
+    </footer>
 
     <script>
-        // # Objeto que almacena los usuarios y sus contraseñas
-        const users = {
-            "Marouan": "M@r0u@n!2024", // # Usuario Marouan con su contraseña
-            "Ivan": "1v@n_Seguro99", // # Usuario Ivan con su contraseña
-            "Noa": "N0a$ClaveXyz" // # Usuario Noa con su contraseña
-        };
+        document.addEventListener('DOMContentLoaded', function() {
+            // Objeto que almacena los usuarios y sus contraseñas (en producción, esto debería estar en el servidor)
+            const users = {
+                "Marouan": "M@r0u@n!2024",
+                "Ivan": "1v@n_Seguro99",
+                "Noa": "N0a$ClaveXyz"
+            };
 
-        // # Añade un evento al botón de inicio de sesión para procesar el inicio de sesión
-        document.getElementById("login-btn").addEventListener("click", () => {
-            const username = document.getElementById("username").value; // # Obtiene el valor del campo de nombre de usuario
-            const password = document.getElementById("password").value; // # Obtiene el valor del campo de contraseña
+            // Referencias a elementos del DOM
+            const loginForm = document.getElementById("login-form");
+            const loginContainer = document.getElementById("login-container");
+            const assistantContainer = document.getElementById("assistant-container");
+            const usernameInput = document.getElementById("username");
+            const passwordInput = document.getElementById("password");
+            const loginError = document.getElementById("login-error");
+            const startBtn = document.getElementById("start-btn");
+            const stopBtn = document.getElementById("stop-btn");
+            const responseElement = document.getElementById("response");
+            const statusText = document.getElementById("status-text");
+            const waves = document.getElementById("waves");
+            const togglePasswordBtn = document.getElementById("toggle-password");
+            const logoutBtn = document.getElementById("logout-btn");
 
-            // # Comprueba si el usuario existe y si la contraseña es correcta
-            if (users[username] && users[username] === password) {
-                window.location.href = "https://kafufa.github.io/voxai/apartados.html"; // # Redirige a la página del asistente si el inicio de sesión es correcto
-            } else {
-                document.getElementById("login-error").style.display = "block"; // # Muestra el mensaje de error si las credenciales son incorrectas
+            // Función para mostrar/ocultar contraseña
+            togglePasswordBtn.addEventListener("click", function() {
+                const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+                passwordInput.setAttribute("type", type);
+                this.querySelector(".eye-icon").textContent = type === "password" ? "👁️" : "🔒";
+            });
+
+            // Gestionar el inicio de sesión
+            loginForm.addEventListener("submit", function(e) {
+                e.preventDefault();
+                
+                const username = usernameInput.value.trim();
+                const password = passwordInput.value;
+
+                // Verificar credenciales
+                if (users[username] && users[username] === password) {
+                    // Guardar nombre de usuario en sessionStorage (no para contraseñas)
+                    sessionStorage.setItem("currentUser", username);
+                    
+                    // Mostrar interfaz del asistente
+                    loginContainer.classList.add("hidden");
+                    assistantContainer.classList.remove("hidden");
+                    
+                    // Bienvenida personalizada
+                    responseElement.textContent = `Bienvenido ${username}. ¿En qué puedo ayudarte hoy?`;
+                } else {
+                    // Mostrar error
+                    loginError.textContent = "Usuario o contraseña incorrectos";
+                    loginError.classList.add("show");
+                    
+                    // Eliminar mensaje de error después de 3 segundos
+                    setTimeout(() => {
+                        loginError.classList.remove("show");
+                    }, 3000);
+                }
+            });
+
+            // Variables para el reconocimiento de voz
+            let recognition = null;
+            let isListening = false;
+
+            // Inicializar el reconocimiento de voz
+            function setupSpeechRecognition() {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                
+                if (!SpeechRecognition) {
+                    responseElement.textContent = "Lo siento, tu navegador no soporta reconocimiento de voz.";
+                    startBtn.disabled = true;
+                    return false;
+                }
+                
+                recognition = new SpeechRecognition();
+                recognition.lang = "es-ES";
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                
+                recognition.onstart = function() {
+                    isListening = true;
+                    statusText.textContent = "Escuchando...";
+                    waves.classList.remove("hidden");
+                    startBtn.classList.add("hidden");
+                    stopBtn.classList.remove("hidden");
+                };
+                
+                recognition.onend = function() {
+                    isListening = false;
+                    statusText.textContent = "Esperando...";
+                    waves.classList.add("hidden");
+                    startBtn.classList.remove("hidden");
+                    stopBtn.classList.add("hidden");
+                };
+                
+                recognition.onerror = function(event) {
+                    console.error("Error en reconocimiento:", event.error);
+                    responseElement.textContent = `Error: ${event.error === 'not-allowed' ? 'Necesito permiso para usar el micrófono' : 'No pude entenderte. Inténtalo de nuevo.'}`;
+                    recognition.stop();
+                };
+                
+                recognition.onresult = handleVoiceResult;
+                
+                return true;
             }
-        });
 
-        // # Añade un evento al botón del asistente para iniciar el reconocimiento de voz
-        document.getElementById("start-btn").addEventListener("click", () => {
-            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)(); // # Inicializa el reconocimiento de voz
-            recognition.lang = "es-ES"; // # Establece el idioma a español
-            recognition.start(); // # Comienza el reconocimiento de voz
+            // Procesar el resultado del reconocimiento de voz
+            function handleVoiceResult(event) {
+                const transcript = event.results[0][0].transcript.trim();
+                responseElement.textContent = "Procesando: " + transcript;
+                
+                // Verificar si es una solicitud de cierre de sesión
+                if (transcript.toLowerCase().includes("cerrar sesión") || 
+                    transcript.toLowerCase().includes("salir") || 
+                    transcript.toLowerCase().includes("logout")) {
+                    logout();
+                    return;
+                }
 
-            // # Define lo que sucede cuando se recibe un resultado del reconocimiento
-            recognition.onresult = function(event) {
-                const transcript = event.results[0][0].transcript; // # Obtiene el texto transcrito del reconocimiento de voz
-                document.getElementById("response").innerText = "Procesando: " + transcript; // # Muestra el texto procesado
-
-                // # Envía la transcripción a un endpoint para procesarla
-                fetch("https://hook.eu2.make.com/sw3ligopuhaxs11xorsf61ia5apje4hy", { 
-                    method: "POST", // # Método POST para enviar datos
-                    headers: { "Content-Type": "application/json" }, // # Establece el tipo de contenido como JSON
-                    body: JSON.stringify({ query: transcript }) // # Convierte el objeto a JSON
+                // Enviar la transcripción para procesamiento
+                statusText.textContent = "Procesando...";
+                
+                // Usar constantes para API endpoint
+                const API_ENDPOINT = "https://hook.eu2.make.com/sw3ligopuhaxs11xorsf61ia5apje4hy";
+                
+                fetch(API_ENDPOINT, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-User-ID": sessionStorage.getItem("currentUser") // Identificar al usuario en la solicitud
+                    },
+                    body: JSON.stringify({ 
+                        query: transcript,
+                        timestamp: new Date().toISOString()
+                    })
                 })
-                .then(response => response.json()) // # Convierte la respuesta a JSON
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Error de red: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    document.getElementById("response").innerText = "Respuesta: " + data.response; // # Muestra la respuesta del asistente
+                    responseElement.textContent = data.response || "Respuesta recibida sin contenido";
+                    
+                    // Opcional: Leer la respuesta en voz alta
+                    if ('speechSynthesis' in window) {
+                        const utterance = new SpeechSynthesisUtterance(data.response);
+                        utterance.lang = "es-ES";
+                        speechSynthesis.speak(utterance);
+                    }
                 })
                 .catch(error => {
-                    console.error("Error:", error); // # Muestra el error en la consola
-                    document.getElementById("response").innerText = "Hubo un error. Inténtalo de nuevo."; // # Mensaje de error en caso de fallo
+                    console.error("Error:", error);
+                    responseElement.textContent = "Hubo un error al procesar tu solicitud. Por favor, inténtalo de nuevo.";
+                })
+                .finally(() => {
+                    statusText.textContent = "Esperando...";
                 });
-            };
+            }
+
+            // Iniciar reconocimiento de voz
+            startBtn.addEventListener("click", function() {
+                if (!recognition && !setupSpeechRecognition()) {
+                    return;
+                }
+                
+                try {
+                    recognition.start();
+                } catch (error) {
+                    console.error("Error al iniciar reconocimiento:", error);
+                    
+                    // Reiniciar reconocimiento si ya estaba activo
+                    if (error.name === 'InvalidStateError') {
+                        recognition.stop();
+                        setTimeout(() => recognition.start(), 200);
+                    }
+                }
+            });
+
+            // Detener reconocimiento de voz
+            stopBtn.addEventListener("click", function() {
+                if (recognition && isListening) {
+                    recognition.stop();
+                }
+            });
+
+            // Función de cierre de sesión
+            function logout() {
+                sessionStorage.removeItem("currentUser");
+                assistantContainer.classList.add("hidden");
+                loginContainer.classList.remove("hidden");
+                responseElement.textContent = "";
+                usernameInput.value = "";
+                passwordInput.value = "";
+            }
+
+            // Botón de cierre de sesión
+            logoutBtn.addEventListener("click", logout);
+
+            // Comprobar si hay una sesión activa (por ejemplo, si se recarga la página)
+            const currentUser = sessionStorage.getItem("currentUser");
+            if (currentUser && users[currentUser]) {
+                loginContainer.classList.add("hidden");
+                assistantContainer.classList.remove("hidden");
+                responseElement.textContent = `Bienvenido de nuevo, ${currentUser}. ¿En qué puedo ayudarte hoy?`;
+            }
+
+            // Detectar cuando la ventana pierde el foco y detener el reconocimiento
+            window.addEventListener("blur", function() {
+                if (recognition && isListening) {
+                    recognition.stop();
+                }
+            });
+
+            // Intentar inicializar el reconocimiento de voz al cargar
+            setupSpeechRecognition();
         });
     </script>
 </body>
