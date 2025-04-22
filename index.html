@@ -1,49 +1,186 @@
-<!DOCTYPE html> <!-- # Define el tipo de documento como HTML5 -->
-<html lang="es"> <!-- # Define el idioma del documento como español -->
+<!DOCTYPE html>
+<html lang="es">
 <head>
-    <meta charset="UTF-8"> <!-- # Establece la codificación de caracteres a UTF-8 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- # Configura la vista para dispositivos móviles -->
-    <title>VoxAI - Asistente de Voz</title> <!-- # Título de la página que aparece en la pestaña del navegador -->
-    <link rel="stylesheet" href="styles.css"> <!-- # Vincula la hoja de estilos CSS -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="VoxAI - Acceso a tu asistente de voz personal">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>VoxAI - Asistente de Voz</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Añado fuentes de Google para mejorar la apariencia -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Icono para la pestaña del navegador -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
+    <main>
+        <div class="app-container">
+            <header>
+                <h1>VoxAI</h1>
+                <p class="tagline">Tu asistente de voz inteligente</p>
+            </header>
 
-    <div id="login-container" class="container"> <!-- # Contenedor para el formulario de inicio de sesión -->
-        <h2>Iniciar Sesión</h2> <!-- # Título del formulario de inicio de sesión -->
-        <input type="text" id="username" placeholder="Usuario"> <!-- # Campo de entrada para el nombre de usuario -->
-        <input type="password" id="password" placeholder="Contraseña"> <!-- # Campo de entrada para la contraseña -->
-        <button id="login-btn">Ingresar</button> <!-- # Botón para procesar el inicio de sesión -->
-        <p id="login-error" style="color: red; display: none;">Usuario o contraseña incorrectos</p> <!-- # Mensaje de error que se muestra si las credenciales son incorrectas -->
-    </div>
+            <!-- Formulario de inicio de sesión -->
+            <section id="login-container" class="container">
+                <h2>Iniciar Sesión</h2>
+                <form id="login-form" method="post">
+                    <div class="form-group">
+                        <label for="username">Usuario</label>
+                        <input type="text" id="username" name="username" placeholder="Ingresa tu nombre de usuario" required autocomplete="username">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required autocomplete="current-password">
+                            <button type="button" id="toggle-password" aria-label="Mostrar contraseña" tabindex="0">
+                                <span id="eye-icon">👁️</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" id="login-btn" class="btn btn-primary">Ingresar</button>
+                    </div>
+                    
+                    <div id="login-error" class="error-message" role="alert" aria-live="assertive"></div>
+                </form>
+            </section>
 
-    <div id="assistant-container" class="container" style="display: none;"> <!-- # Contenedor para el asistente de voz, oculto inicialmente -->
-        <h2>Asistente de Voz</h2> <!-- # Título del asistente de voz -->
-        <button id="start-btn">Comenzar Reconocimiento de Voz</button> <!-- # Botón para iniciar el reconocimiento de voz -->
-        <p id="response"></p> <!-- # Elemento para mostrar la respuesta del asistente de voz -->
-    </div>
+            <!-- Contenedor del asistente (inicialmente oculto) -->
+            <section id="assistant-container" class="container hidden">
+                <h2>Asistente de Voz</h2>
+                <div class="assistant-content">
+                    <div class="voice-controls">
+                        <button id="start-btn" class="btn btn-action">Comenzar Reconocimiento de Voz</button>
+                    </div>
+                    <div class="response-area">
+                        <p id="response" role="status" aria-live="polite"></p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 VoxAI - Todos los derechos reservados</p>
+    </footer>
 
     <script>
-        // # Objeto que almacena los usuarios y sus contraseñas
-        const users = {
-            "Marouan": "M@r0u@n!2024", // # Usuario Marouan con su contraseña
-            "Ivan": "1v@n_Seguro99", // # Usuario Ivan con su contraseña
-            "Noa": "N0a$ClaveXyz" // # Usuario Noa con su contraseña
-        };
-
-        // # Añade un evento al botón de inicio de sesión para procesar el inicio de sesión
-        document.getElementById("login-btn").addEventListener("click", () => {
-            const username = document.getElementById("username").value; // # Obtiene el valor del campo de nombre de usuario
-            const password = document.getElementById("password").value; // # Obtiene el valor del campo de contraseña
-
-            // # Comprueba si el usuario existe y si la contraseña es correcta
-            if (users[username] && users[username] === password) {
-                window.location.href = "https://kafufa.github.io/voxai/apartados.html"; // # Redirige a la página del asistente si el inicio de sesión es correcto
+        document.addEventListener('DOMContentLoaded', () => {
+            // Referencias a elementos del DOM
+            const loginForm = document.getElementById('login-form');
+            const loginContainer = document.getElementById('login-container');
+            const assistantContainer = document.getElementById('assistant-container');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const togglePasswordBtn = document.getElementById('toggle-password');
+            const loginError = document.getElementById('login-error');
+            
+            // Usuarios y contraseñas (en producción, esto debería estar en el servidor)
+            const users = {
+                "Marouan": "M@r0u@n!2024",
+                "Ivan": "1v@n_Seguro99", 
+                "Noa": "N0a$ClaveXyz"
+            };
+            
+            // Funcionalidad para mostrar/ocultar contraseña
+            togglePasswordBtn.addEventListener('click', () => {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                
+                // Cambiar el icono según el estado
+                const eyeIcon = document.getElementById('eye-icon');
+                eyeIcon.textContent = type === 'password' ? '👁️' : '🔒';
+                
+                // Actualizar el texto de accesibilidad
+                togglePasswordBtn.setAttribute('aria-label', 
+                    type === 'password' ? 'Mostrar contraseña' : 'Ocultar contraseña');
+            });
+            
+            // Manejo del envío del formulario
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault(); // Prevenir el envío del formulario
+                
+                // Obtener y limpiar valores
+                const username = usernameInput.value.trim();
+                const password = passwordInput.value;
+                
+                // Validación básica
+                if (!username || !password) {
+                    showError('Por favor, completa todos los campos');
+                    return;
+                }
+                
+                // Verificar credenciales
+                if (users[username] && users[username] === password) {
+                    // Almacenar información de sesión (no almacenar contraseñas)
+                    sessionStorage.setItem('voxai_user', username);
+                    
+                    // Redirección - mantenemos la funcionalidad original
+                    window.location.href = "https://kafufa.github.io/voxai/apartados.html";
+                } else {
+                    // Mostrar error con animación
+                    showError('Usuario o contraseña incorrectos');
+                    
+                    // Limpiar campo de contraseña por seguridad
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            });
+            
+            // Función para mostrar mensajes de error
+            function showError(message) {
+                loginError.textContent = message;
+                loginError.classList.add('show');
+                
+                // Ocultar después de 3 segundos
+                setTimeout(() => {
+                    loginError.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Prevenir ataques de fuerza bruta limitando intentos
+            let loginAttempts = 0;
+            const MAX_ATTEMPTS = 5;
+            
+            // Interceptamos el envío para controlar intentos
+            loginForm.addEventListener('submit', (e) => {
+                if (loginAttempts >= MAX_ATTEMPTS) {
+                    e.preventDefault();
+                    showError('Demasiados intentos fallidos. Intenta más tarde.');
+                    
+                    // Deshabilitar el formulario temporalmente
+                    const inputs = loginForm.querySelectorAll('input, button');
+                    inputs.forEach(input => input.disabled = true);
+                    
+                    // Rehabilitar después de 2 minutos
+                    setTimeout(() => {
+                        inputs.forEach(input => input.disabled = false);
+                        loginAttempts = 0;
+                    }, 120000);
+                }
+            });
+            
+            // Escuchar eventos de tecla para mejorar la accesibilidad
+            togglePasswordBtn.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    togglePasswordBtn.click();
+                }
+            });
+            
+            // Recuperar sesión si existe
+            const savedUser = sessionStorage.getItem('voxai_user');
+            if (savedUser && users[savedUser]) {
+                usernameInput.value = savedUser;
+                passwordInput.focus();
             } else {
-                document.getElementById("login-error").style.display = "block"; // # Muestra el mensaje de error si las credenciales son incorrectas
+                usernameInput.focus();
             }
         });
-
-       
     </script>
 </body>
 </html>
